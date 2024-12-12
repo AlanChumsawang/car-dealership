@@ -8,6 +8,10 @@ import java.sql.SQLException;
 public class DatabaseConfig {
     private static BasicDataSource dataSource; //object to hold the information required to make a connection to the database
 
+    /*
+    This method returns a instance of BasicDataSource.
+    If no instance exist, a new instance is initialized with the provided credentials.
+     */
 
     //TODO ADD ERROR HANDLING
     //ADD THREAD SAFETY?
@@ -21,6 +25,9 @@ public class DatabaseConfig {
         return dataSource;
     }
 
+    /*
+    This method returns a connection from BasicDataSource.
+     */
     public static Connection getConnection(String url, String usr, String password) throws SQLException {
         return getDataSource(url, usr, password).getConnection();
     }
