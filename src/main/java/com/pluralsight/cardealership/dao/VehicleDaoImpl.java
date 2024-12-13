@@ -1,6 +1,5 @@
 package com.pluralsight.cardealership.dao;
 
-import com.pluralsight.cardealership.config.DatabaseConfig;
 import com.pluralsight.cardealership.model.Vehicle;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -13,10 +12,9 @@ import java.util.List;
 public class VehicleDaoImpl implements VehicleDao {
     private final JdbcTemplate mySqlDatabase;
 
-    public VehicleDaoImpl(JdbcTemplate mySqlDatabase){
+    public VehicleDaoImpl(JdbcTemplate mySqlDatabase) {
         this.mySqlDatabase = mySqlDatabase;
     }
-
 
     @Override
     public List<Vehicle> findAllVehicles() {
@@ -32,66 +30,6 @@ public class VehicleDaoImpl implements VehicleDao {
             }
         } catch (SQLException e) {
             e.printStackTrace();
-        }
-        return vehicles;
-    }
-
-    @Override
-    public List<Vehicle> findVehicleByMakeModel(String make, String model) {
-        List<Vehicle> vehicles = new ArrayList<>();
-        String query = "SELECT * FROM Vehicles WHERE Make = ? AND Model = ?";
-
-        try (Connection connection = mySqlDatabase.getDataSource().getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-
-            preparedStatement.setString(1, make);
-            preparedStatement.setString(2, model);
-
-            ResultSet resultSet = preparedStatement.executeQuery();
-            while (resultSet.next()) {
-                vehicles.add(createVehicleFromResultSet(resultSet));
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-        return vehicles;
-    }
-
-    @Override
-    public List<Vehicle> findVehicleByPrice(double minPrice, double maxPrice) {
-        List<Vehicle> vehicles = new ArrayList<>();
-        String query = "SELECT * FROM Vehicles WHERE Price >= ? and Price <= ?";
-
-        try (Connection connection = mySqlDatabase.getDataSource().getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-
-            preparedStatement.setString(1, String.valueOf(minPrice));
-            preparedStatement.setString(2, String.valueOf(maxPrice));
-            ResultSet resultSet = preparedStatement.executeQuery();
-            while (resultSet.next()) {
-                vehicles.add(createVehicleFromResultSet(resultSet));
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-        return vehicles;
-    }
-
-    @Override
-    public List<Vehicle> findVehicleByYear(int year) {
-        List<Vehicle> vehicles = new ArrayList<>();
-        String query = "SELECT * FROM Vehicles WHERE Year = ?";
-
-        try (Connection connection = mySqlDatabase.getDataSource().getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-
-            preparedStatement.setString(1, String.valueOf(year));
-            ResultSet resultSet = preparedStatement.executeQuery();
-            while (resultSet.next()) {
-                vehicles.add(createVehicleFromResultSet(resultSet));
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
         }
         return vehicles;
     }
@@ -116,69 +54,12 @@ public class VehicleDaoImpl implements VehicleDao {
     }
 
     @Override
-    public List<Vehicle> findVehicleByColor(String color) {
-        List<Vehicle> vehicles = new ArrayList<>();
-        String query = "SELECT * FROM Vehicles WHERE Color = ?";
-
-        try (Connection connection = mySqlDatabase.getDataSource().getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-
-            preparedStatement.setString(1, String.valueOf(color));
-            ResultSet resultSet = preparedStatement.executeQuery();
-            while (resultSet.next()) {
-                vehicles.add(createVehicleFromResultSet(resultSet));
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-        return vehicles;
-    }
-
-    @Override
-    public List<Vehicle> findVehicleByMileage(int mileage) {
-        List<Vehicle> vehicles = new ArrayList<>();
-        String query = "SELECT * FROM Vehicles WHERE Odometer <= ?";
-
-        try (Connection connection = mySqlDatabase.getDataSource().getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-
-            preparedStatement.setString(1, String.valueOf(mileage));
-            ResultSet resultSet = preparedStatement.executeQuery();
-            while (resultSet.next()) {
-                vehicles.add(createVehicleFromResultSet(resultSet));
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-        return vehicles;
-    }
-
-    @Override
-    public List<Vehicle> findVehicleByType(String type) {
-        List<Vehicle> vehicles = new ArrayList<>();
-        String query = "SELECT * FROM Vehicles WHERE Type = ?";
-
-        try (Connection connection = mySqlDatabase.getDataSource().getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-
-            preparedStatement.setString(1, String.valueOf(type));
-            ResultSet resultSet = preparedStatement.executeQuery();
-            while (resultSet.next()) {
-                vehicles.add(createVehicleFromResultSet(resultSet));
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-        return vehicles;
-    }
-
-    @Override
-    public void addVehicle(Vehicle vehicle){
+    public void addVehicle(Vehicle vehicle) {
         String query = """
         INSERT INTO Vehicles (VIN, Year, Make, Model, Type, Color, Odometer, Price, Sold)
         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
         """;
-        try (Connection connection = mySqlDatabase.getDataSource().getConnection()){
+        try (Connection connection = mySqlDatabase.getDataSource().getConnection()) {
             PreparedStatement preparedStatement = connection.prepareStatement(query);
             preparedStatement.setInt(1, vehicle.getVin());
             preparedStatement.setInt(2, vehicle.getYear());
@@ -190,14 +71,13 @@ public class VehicleDaoImpl implements VehicleDao {
             preparedStatement.setDouble(8, vehicle.getPrice());
             preparedStatement.setBoolean(9, vehicle.isSold());
             preparedStatement.executeUpdate();
-        }
-        catch (SQLException e){
+        } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
     @Override
-    public void deleteVehicle(Integer vin){
+    public void deleteVehicle(Integer vin) {
         String query = "DELETE FROM Vehicles WHERE VIN = ?";
         try (Connection connection = mySqlDatabase.getDataSource().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
@@ -211,9 +91,9 @@ public class VehicleDaoImpl implements VehicleDao {
     @Override
     public void updateVehicle(Vehicle vehicle, int oldVin) {
         String query = """
-    UPDATE Vehicles SET VIN = ?, Year = ?, Make = ?, Model = ?, Type = ?, Color = ?, Odometer = ?, Price = ?, Sold = ?
-    WHERE VIN = ?
-    """;
+        UPDATE Vehicles SET VIN = ?, Year = ?, Make = ?, Model = ?, Type = ?, Color = ?, Odometer = ?, Price = ?, Sold = ?
+        WHERE VIN = ?
+        """;
         try (Connection connection = mySqlDatabase.getDataSource().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setInt(1, vehicle.getVin());
