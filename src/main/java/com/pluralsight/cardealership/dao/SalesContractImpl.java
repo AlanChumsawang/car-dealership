@@ -1,22 +1,23 @@
 package com.pluralsight.cardealership.dao;
 
-import com.pluralsight.cardealership.config.DatabaseConfig;
 import com.pluralsight.cardealership.model.SalesContract;
 import com.pluralsight.cardealership.model.Vehicle;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Repository;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
+@Repository
 public class SalesContractImpl implements SalesContractDao {
-    private final String url;
-    private final String usr;
-    private final String password;
+    private final JdbcTemplate mySqlDatabase;
 
-    public SalesContractImpl(String url, String usr, String password) {
-        this.url = url;
-        this.usr = usr;
-        this.password = password;
+    @Autowired
+    public SalesContractImpl(JdbcTemplate mySqlDatabase) {
+        this.mySqlDatabase = mySqlDatabase;
     }
 
     @Override
@@ -24,7 +25,7 @@ public class SalesContractImpl implements SalesContractDao {
         List<SalesContract> salesContracts = new ArrayList<>();
         String query = "SELECT * FROM Sales_Contracts sc JOIN Vehicles v ON sc.VIN = v.VIN";
 
-        try (Connection connection = DatabaseConfig.getConnection(url, usr, password)) {
+        try (Connection connection = Objects.requireNonNull(mySqlDatabase.getDataSource()).getConnection()) {
             PreparedStatement preparedStatement = connection.prepareStatement(query);
             ResultSet resultSet = preparedStatement.executeQuery();
 
@@ -32,7 +33,7 @@ public class SalesContractImpl implements SalesContractDao {
                 salesContracts.add(createSalesContractFromResultSet(resultSet));
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new RuntimeException();
         }
         return salesContracts;
     }
@@ -42,7 +43,7 @@ public class SalesContractImpl implements SalesContractDao {
         SalesContract salesContract = null;
         String query = "SELECT * FROM Sales_Contracts sc JOIN Vehicles v ON sc.VIN = v.VIN WHERE sc.Contract_ID = ?";
 
-        try (Connection connection = DatabaseConfig.getConnection(url, usr, password)) {
+        try (Connection connection = Objects.requireNonNull(mySqlDatabase.getDataSource()).getConnection()) {
             PreparedStatement preparedStatement = connection.prepareStatement(query);
             preparedStatement.setInt(1, id);
             ResultSet resultSet = preparedStatement.executeQuery();
@@ -51,7 +52,7 @@ public class SalesContractImpl implements SalesContractDao {
                 salesContract = createSalesContractFromResultSet(resultSet);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new RuntimeException();
         }
         return salesContract;
     }
@@ -60,8 +61,9 @@ public class SalesContractImpl implements SalesContractDao {
     public void addSalesContract(SalesContract salesContract) {
         String query = "INSERT INTO Sales_Contracts (Contract_ID, VIN, customerId, Sale_Date, Total_Price, isFinanced, Loan_Term, customerName, customerEmail) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
-        try (Connection connection = DatabaseConfig.getConnection(url, usr, password);
-             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+        try (Connection connection = Objects.requireNonNull(mySqlDatabase.getDataSource()).getConnection())
+        {
+             PreparedStatement preparedStatement = connection.prepareStatement(query);
 
             preparedStatement.setInt(1, salesContract.getContractID());
             preparedStatement.setInt(2, salesContract.getVehicle().getVin());
@@ -72,10 +74,10 @@ public class SalesContractImpl implements SalesContractDao {
             preparedStatement.setInt(7, salesContract.getLoanTerm());
             preparedStatement.setString(8, salesContract.getCustomerName());
             preparedStatement.setString(9, salesContract.getCustomerEmail());
-
             preparedStatement.executeUpdate();
+
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new RuntimeException();
         }
     }
 
@@ -83,9 +85,9 @@ public class SalesContractImpl implements SalesContractDao {
     public void updateSalesContract(SalesContract salesContract) {
         String query = "UPDATE Sales_Contracts SET VIN = ?, customerId = ?, Sale_Date = ?, Total_Price = ?, isFinanced = ?, Loan_Term = ?, customerName = ?, customerEmail = ? WHERE Contract_ID = ?";
 
-        try (Connection connection = DatabaseConfig.getConnection(url, usr, password);
-             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-
+        try (Connection connection = Objects.requireNonNull(mySqlDatabase.getDataSource()).getConnection())
+        {
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
             preparedStatement.setInt(1, salesContract.getVehicle().getVin());
             preparedStatement.setInt(2, salesContract.getCustomerId());
             preparedStatement.setDate(3, Date.valueOf(salesContract.getStartDate()));
@@ -98,7 +100,7 @@ public class SalesContractImpl implements SalesContractDao {
 
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new RuntimeException();
         }
     }
 
@@ -106,13 +108,13 @@ public class SalesContractImpl implements SalesContractDao {
     public void deleteSalesContract(int id) {
         String query = "DELETE FROM Sales_Contracts WHERE Contract_ID = ?";
 
-        try (Connection connection = DatabaseConfig.getConnection(url, usr, password);
-             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+        try (Connection connection = Objects.requireNonNull(mySqlDatabase.getDataSource()).getConnection()){
 
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
             preparedStatement.setInt(1, id);
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new RuntimeException();
         }
     }
 
