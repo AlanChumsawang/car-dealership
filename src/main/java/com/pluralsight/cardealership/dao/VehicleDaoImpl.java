@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Repository
 public class VehicleDaoImpl implements VehicleDao {
@@ -21,15 +22,15 @@ public class VehicleDaoImpl implements VehicleDao {
         List<Vehicle> vehicles = new ArrayList<>();
         String query = "SELECT * FROM Vehicles";
 
-        try (Connection connection = mySqlDatabase.getDataSource().getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(query);
-             ResultSet resultSet = preparedStatement.executeQuery()) {
+        try (Connection connection = Objects.requireNonNull(mySqlDatabase.getDataSource()).getConnection()) {
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            ResultSet resultSet = preparedStatement.executeQuery();
 
             while (resultSet.next()) {
                 vehicles.add(createVehicleFromResultSet(resultSet));
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new RuntimeException();
         }
         return vehicles;
     }
@@ -38,8 +39,8 @@ public class VehicleDaoImpl implements VehicleDao {
     public Vehicle findVehicleByVin(int vin) {
         String query = "SELECT * FROM Vehicles WHERE Vin = ?";
 
-        try (Connection connection = mySqlDatabase.getDataSource().getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+        try (Connection connection = Objects.requireNonNull(mySqlDatabase.getDataSource()).getConnection()) {
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
 
             preparedStatement.setString(1, String.valueOf(vin));
             ResultSet resultSet = preparedStatement.executeQuery();
@@ -56,10 +57,10 @@ public class VehicleDaoImpl implements VehicleDao {
     @Override
     public void addVehicle(Vehicle vehicle) {
         String query = """
-        INSERT INTO Vehicles (VIN, Year, Make, Model, Type, Color, Odometer, Price, Sold)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-        """;
-        try (Connection connection = mySqlDatabase.getDataSource().getConnection()) {
+                INSERT INTO Vehicles (VIN, Year, Make, Model, Type, Color, Odometer, Price, Sold)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+                """;
+        try (Connection connection = Objects.requireNonNull(mySqlDatabase.getDataSource()).getConnection()) {
             PreparedStatement preparedStatement = connection.prepareStatement(query);
             preparedStatement.setInt(1, vehicle.getVin());
             preparedStatement.setInt(2, vehicle.getYear());
@@ -72,29 +73,29 @@ public class VehicleDaoImpl implements VehicleDao {
             preparedStatement.setBoolean(9, vehicle.isSold());
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new RuntimeException();
         }
     }
 
     @Override
     public void deleteVehicle(Integer vin) {
         String query = "DELETE FROM Vehicles WHERE VIN = ?";
-        try (Connection connection = mySqlDatabase.getDataSource().getConnection();
+        try (Connection connection = Objects.requireNonNull(mySqlDatabase.getDataSource()).getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setInt(1, vin);
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new RuntimeException();
         }
     }
 
     @Override
     public void updateVehicle(Vehicle vehicle, int oldVin) {
         String query = """
-        UPDATE Vehicles SET VIN = ?, Year = ?, Make = ?, Model = ?, Type = ?, Color = ?, Odometer = ?, Price = ?, Sold = ?
-        WHERE VIN = ?
-        """;
-        try (Connection connection = mySqlDatabase.getDataSource().getConnection();
+                UPDATE Vehicles SET VIN = ?, Year = ?, Make = ?, Model = ?, Type = ?, Color = ?, Odometer = ?, Price = ?, Sold = ?
+                WHERE VIN = ?
+                """;
+        try (Connection connection = Objects.requireNonNull(mySqlDatabase.getDataSource()).getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setInt(1, vehicle.getVin());
             preparedStatement.setInt(2, vehicle.getYear());
@@ -108,7 +109,7 @@ public class VehicleDaoImpl implements VehicleDao {
             preparedStatement.setInt(10, oldVin);
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new RuntimeException();
         }
     }
 
