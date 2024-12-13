@@ -1,22 +1,25 @@
 package com.pluralsight.cardealership.dao;
 
-import com.pluralsight.cardealership.config.DatabaseConfig;
 import com.pluralsight.cardealership.model.Dealership;
-import com.pluralsight.cardealership.model.Vehicle;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Repository;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
+@Repository
 public class DealershipDaoImpl implements DealershipDao{
-    private final String url;
-    private final String usr;
-    private final String password;
+    private final JdbcTemplate mySqlDatabase;
 
-    public DealershipDaoImpl(String url, String usr, String password) {
-        this.url = url;
-        this.usr = usr;
-        this.password = password;
+    @Autowired
+    public DealershipDaoImpl(JdbcTemplate mySqlDatabase) {
+        this.mySqlDatabase = mySqlDatabase;
     }
 
 
@@ -25,9 +28,9 @@ public class DealershipDaoImpl implements DealershipDao{
         List<Dealership> dealerships = new ArrayList<>();
         String query = "SELECT * FROM Dealerships";
 
-        try (Connection connection = DatabaseConfig.getConnection(url,usr,password);
+        try (Connection connection = Objects.requireNonNull(mySqlDatabase.getDataSource()).getConnection()){
              PreparedStatement preparedStatement = connection.prepareStatement(query);
-             ResultSet resultSet = preparedStatement.executeQuery()) {
+             ResultSet resultSet = preparedStatement.executeQuery();
 
             while (resultSet.next()) {
                 Dealership dealership = new Dealership(
@@ -41,7 +44,7 @@ public class DealershipDaoImpl implements DealershipDao{
 
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new RuntimeException();
         }
         return dealerships;
     }
