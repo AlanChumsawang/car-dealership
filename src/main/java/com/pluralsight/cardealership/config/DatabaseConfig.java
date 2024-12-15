@@ -6,9 +6,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.core.JdbcTemplate;
 
-import java.sql.Connection;
-import java.sql.SQLException;
-
 @Configuration
 public class DatabaseConfig {
     private static BasicDataSource dataSource; //object to hold the information required to make a connection to the database
@@ -18,8 +15,6 @@ public class DatabaseConfig {
     If no instance exist, a new instance is initialized with the provided credentials.
      */
 
-    //TODO ADD ERROR HANDLING
-    //TODO ADD THREAD SAFETY?
     @Bean
     public BasicDataSource getDataSource(@Value("${spring.datasource.url}") String url,
                                          @Value("${spring.datasource.username}") String usr,
