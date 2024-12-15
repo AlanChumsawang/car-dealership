@@ -61,23 +61,21 @@ public class SalesContractImpl implements SalesContractDao {
     public void addSalesContract(SalesContract salesContract) {
         String query = "INSERT INTO Sales_Contracts (Contract_ID, VIN, customerId, Sale_Date, Total_Price, isFinanced, Loan_Term, customerName, customerEmail) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
-        try (Connection connection = Objects.requireNonNull(mySqlDatabase.getDataSource()).getConnection())
-        {
-             PreparedStatement preparedStatement = connection.prepareStatement(query);
+        try (Connection connection = Objects.requireNonNull(mySqlDatabase.getDataSource()).getConnection()) {
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
 
             preparedStatement.setInt(1, salesContract.getContractID());
             preparedStatement.setInt(2, salesContract.getVehicle().getVin());
             preparedStatement.setInt(3, salesContract.getCustomerId());
-            preparedStatement.setString(4,salesContract.getStartDate());
+            preparedStatement.setString(4, salesContract.getStartDate());
             preparedStatement.setDouble(5, salesContract.getTotalPrice());
             preparedStatement.setBoolean(6, salesContract.isFinanced());
             preparedStatement.setInt(7, salesContract.getLoanTerm());
             preparedStatement.setString(8, salesContract.getCustomerName());
             preparedStatement.setString(9, salesContract.getCustomerEmail());
             preparedStatement.executeUpdate();
-
         } catch (SQLException e) {
-            throw new RuntimeException();
+            throw new RuntimeException("Error adding sales contract", e);
         }
     }
 
