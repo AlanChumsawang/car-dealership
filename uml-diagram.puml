@@ -1,0 +1,228 @@
+@startuml
+
+package com.pluralsight.cardealership.model {
+    class Vehicle {
+        - int vin
+        - int year
+        - String make
+        - String model
+        - String type
+        - String color
+        - int odometer
+        - double price
+        - boolean isSold
+        + Vehicle(int vin, int year, String make, String model, String vehicleType, String color, int odometer, double price, boolean isSold)
+        + int getVin()
+        + int getYear()
+        + String getMake()
+        + String getModel()
+        + String getColor()
+        + int getOdometer()
+        + double getPrice()
+        + String getType()
+        + boolean isSold()
+        + void setVin(int vin)
+        + String toString()
+    }
+
+    abstract class Contract {
+        - String startDate
+        - String customerName
+        - String customerEmail
+        - int contractID
+        - int customerId
+        - Vehicle vehicle
+        - double totalPrice
+        - double monthlyPayment
+        + Contract(String startDate, String customerName, String customerEmail, int customerId, Vehicle vehicle, int contractID)
+        + abstract double getTotalPrice()
+        + abstract double getMonthlyPayment()
+        + abstract String formatContract(Contract contract, Vehicle vehicle)
+        + String getStartDate()
+        + String getCustomerName()
+        + String getCustomerEmail()
+        + int getCustomerId()
+        + Vehicle getVehicle()
+        + int getContractID()
+    }
+
+    class SalesContract extends Contract {
+        - double salesTax
+        - double recordingFee
+        - double processingFee
+        - boolean isFinanced
+        - double annualInterestRate
+        - int loanTerm
+        - double monthlyPayment
+        + SalesContract(int contractID, String startDate, String customerName, String customerEmail, int customerId, Vehicle vehicle, boolean isFinanced)
+        + String toString()
+        + double getTotalPrice()
+        + double getMonthlyPayment()
+        + String formatContract(Contract contract, Vehicle vehicle)
+        + boolean isFinanced()
+        + int getLoanTerm()
+    }
+
+    class LeaseContract extends Contract {
+        - double expectedEndingValue
+        - double leaseFee
+        + LeaseContract(int contractID, String startDate, String customerName, String customerEmail, int customerId, Vehicle vehicle, double totalPrice)
+        + double getExpectedEndingValue(Vehicle vehicle)
+        + double getLeaseFee()
+        + double getTotalPrice()
+        + double getMonthlyPayment()
+        + String formatContract(Contract contract, Vehicle vehicle)
+        + void setLeaseFee(double leaseFee)
+        + void setExpectedEndingValue(double expectedEndingValue)
+        + void setMonthlyPayment(double monthlyPayment)
+    }
+
+    class Dealership {
+        - int id
+        - String name
+        - String address
+        - String phone
+        - ArrayList<Vehicle> inventory
+        - ArrayList<Contract> contractsList
+        + Dealership(int id, String name, String address, String phone)
+        + void addVehicle(Vehicle vehicle)
+        + void removeVehicle(Vehicle vehicle)
+        + ArrayList<Vehicle> getAllVehicles()
+        + Vehicle getVehicleByVin(int vin)
+        + ArrayList<Vehicle> getVehicleByPrice(double min, double max)
+        + ArrayList<Vehicle> getVehicleByMakeModel(String make, String model)
+        + ArrayList<Vehicle> getVehicleByYear(int year)
+        + ArrayList<Vehicle> getVehicleByColor(String color)
+        + ArrayList<Vehicle> getVehicleByMileage(int odometer)
+        + ArrayList<Vehicle> getVehicleByType(String type)
+        + String getName()
+        + String getAddress()
+        + ArrayList<Contract> getContractsList()
+        + void addContract(Contract contract)
+        + ArrayList<Contract> getLast10Contracts()
+        + String toString()
+    }
+}
+
+package com.pluralsight.cardealership.dao {
+    interface VehicleDao {
+        + List<Vehicle> findAllVehicles()
+        + Vehicle findVehicleByVin(int vin)
+        + void addVehicle(Vehicle vehicle)
+        + void deleteVehicle(Integer vin)
+        + void updateVehicle(Vehicle vehicle, int oldVin)
+    }
+
+    class VehicleDaoImpl implements VehicleDao {
+        - JdbcTemplate mySqlDatabase
+        + VehicleDaoImpl(JdbcTemplate mySqlDatabase)
+        + List<Vehicle> findAllVehicles()
+        + Vehicle findVehicleByVin(int vin)
+        + void addVehicle(Vehicle vehicle)
+        + void deleteVehicle(Integer vin)
+        + void updateVehicle(Vehicle vehicle, int oldVin)
+    }
+
+    interface SalesContractDao {
+        + List<SalesContract> findAllSalesContracts()
+        + SalesContract findSalesContractById(int id)
+        + void addSalesContract(SalesContract salesContract)
+        + void updateSalesContract(SalesContract salesContract)
+        + void deleteSalesContract(int id)
+    }
+
+    class SalesContractImpl implements SalesContractDao {
+        - JdbcTemplate mySqlDatabase
+        + SalesContractImpl(JdbcTemplate mySqlDatabase)
+        + List<SalesContract> findAllSalesContracts()
+        + SalesContract findSalesContractById(int id)
+        + void addSalesContract(SalesContract salesContract)
+        + void updateSalesContract(SalesContract salesContract)
+        + void deleteSalesContract(int id)
+    }
+
+    interface LeaseContractDao {
+        + List<LeaseContract> findAllLeaseContracts()
+        + LeaseContract findLeaseContractById(int id)
+        + void addLeaseContract(LeaseContract leaseContract)
+        + void updateLeaseContract(LeaseContract leaseContract)
+        + void deleteLeaseContract(int id)
+    }
+
+    class LeaseContractDaoImpl implements LeaseContractDao {
+        - JdbcTemplate mySqlDatabase
+        + LeaseContractDaoImpl(JdbcTemplate mySqlDatabase)
+        + List<LeaseContract> findAllLeaseContracts()
+        + LeaseContract findLeaseContractById(int id)
+        + void addLeaseContract(LeaseContract leaseContract)
+        + void updateLeaseContract(LeaseContract leaseContract)
+        + void deleteLeaseContract(int id)
+    }
+
+    interface DealershipDao {
+        + List<Dealership> findAllDealerships()
+    }
+
+    class DealershipDaoImpl implements DealershipDao {
+        - JdbcTemplate mySqlDatabase
+        + DealershipDaoImpl(JdbcTemplate mySqlDatabase)
+        + List<Dealership> findAllDealerships()
+    }
+}
+
+package com.pluralsight.cardealership.controller {
+    class VehicleController {
+        - VehicleDao vehicleDao
+        + VehicleController(VehicleDao vehicleDao)
+        + Vehicle addVehicle(Vehicle vehicle)
+        + Vehicle findByVin(Integer vehicleVin)
+        + List<Vehicle> findAll()
+        + void deleteVehicle(Integer vehicleVin)
+        + Vehicle updateVehicle(Integer oldVin, Vehicle updatedVehicle)
+        + List<Vehicle> searchVehicles(Integer vin, Double minPrice, Double maxPrice, String make, String model, Integer minYear, Integer maxYear, String color, Integer minMiles, Integer maxMiles, String type)
+    }
+
+    class SalesContractController {
+        - SalesContractDao salesContractDao
+        + SalesContractController(SalesContractDao salesContractDao)
+        + List<SalesContract> findById(Integer id)
+        + SalesContract addSalesContract(SalesContract salesContract)
+        + SalesContract updateSalesContract(Integer oldId, SalesContract updatedContract)
+        + void deleteSalesContract(Integer id)
+    }
+
+    class LeaseContractController {
+        - LeaseContractDao leaseContractDao
+        + LeaseContractController(LeaseContractDao leaseContractDao)
+        + List<LeaseContract> findById(Integer id)
+        + LeaseContract addLeaseContract(LeaseContract leaseContract)
+        + LeaseContract updateLeaseContract(Integer oldId, LeaseContract updatedContract)
+        + void deleteLeaseContract(Integer id)
+    }
+}
+
+package com.pluralsight.cardealership {
+    class CarDealershipApplication {
+        + static void main(String[] args)
+    }
+}
+
+VehicleDaoImpl --> VehicleDao
+SalesContractImpl --> SalesContractDao
+LeaseContractDaoImpl --> LeaseContractDao
+DealershipDaoImpl --> DealershipDao
+
+VehicleController --> VehicleDao
+SalesContractController --> SalesContractDao
+LeaseContractController --> LeaseContractDao
+
+Contract <|-- SalesContract
+Contract <|-- LeaseContract
+Dealership --> Vehicle
+Dealership --> Contract
+
+CarDealershipApplication --> VehicleController
+CarDealershipApplication --> SalesContractController
+CarDealershipApplication --> LeaseContractController
+
+@enduml
