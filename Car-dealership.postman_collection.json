@@ -1,0 +1,561 @@
+{
+	"info": {
+		"_postman_id": "d5843902-9cdc-4756-b7d9-f62b82e05aa9",
+		"name": "Car-dealership",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "40373428"
+	},
+	"item": [
+		{
+			"name": "VehicleController",
+			"item": [
+				{
+					"name": "AddVehicle",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"vin\": 6001,\n    \"year\": 2024,\n    \"make\": \"Bai-Bai\",\n    \"model\": \"Mobile\",\n    \"vehicleType\": \"Magic Rug\",\n    \"color\": \"Blue\",\n    \"odometer\": 2000000,\n    \"price\": 1000000.00,\n    \"sold\": false\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/vehicles",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"vehicles"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getAllVehicles",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/vehicles",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"vehicles"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getMinPrice",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/vehicles/search?minPrice=20000",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"vehicles",
+								"search"
+							],
+							"query": [
+								{
+									"key": "minPrice",
+									"value": "20000"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getByMaxPrice",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/vehicles/search?maxPrice=40000",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"vehicles",
+								"search"
+							],
+							"query": [
+								{
+									"key": "maxPrice",
+									"value": "40000"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getByMake",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/vehicles/search?make=Toyota",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"vehicles",
+								"search"
+							],
+							"query": [
+								{
+									"key": "make",
+									"value": "Toyota"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getModel",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/vehicles/search?model=Camry",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"vehicles",
+								"search"
+							],
+							"query": [
+								{
+									"key": "model",
+									"value": "Camry"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getMinYear",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/vehicles/search?minYear=2019",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"vehicles",
+								"search"
+							],
+							"query": [
+								{
+									"key": "minYear",
+									"value": "2019"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getByMaxYear",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/vehicles/search?maxYear=2020",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"vehicles",
+								"search"
+							],
+							"query": [
+								{
+									"key": "maxYear",
+									"value": "2020"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getByColor",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/vehicles/search?color=red",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"vehicles",
+								"search"
+							],
+							"query": [
+								{
+									"key": "color",
+									"value": "red"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getByType",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/vehicles/search?type=sedan",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"vehicles",
+								"search"
+							],
+							"query": [
+								{
+									"key": "type",
+									"value": "sedan"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getByMinMileage",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/vehicles/search?minMiles=100000",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"vehicles",
+								"search"
+							],
+							"query": [
+								{
+									"key": "minMiles",
+									"value": "100000"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getByMaxMileage",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/vehicles/search?maxMiles=25000",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"vehicles",
+								"search"
+							],
+							"query": [
+								{
+									"key": "maxMiles",
+									"value": "25000"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "updateVehicle",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"vin\": 9023,\n    \"year\": 2024,\n    \"make\": \"Bai-Bai\",\n    \"model\": \"V3\",\n    \"vehicleType\": \"Falcon 9\",\n    \"color\": \"Blue\",\n    \"odometer\": 2000000,\n    \"price\": 1000000.00,\n    \"sold\": false\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/vehicles/update/6001",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"vehicles",
+								"update",
+								"6001"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DeleteVehicle",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/vehicles/delete/9023",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"vehicles",
+								"delete",
+								"9023"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "SalesController",
+			"item": [
+				{
+					"name": "getSalesContractByid",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/sales",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"sales"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "postNewSalesContract",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"contractID\": 6,\n  \"startDate\": \"2024-05-15\",\n  \"customerName\": \"Olivia Martinez\",\n  \"customerEmail\": \"olivia.martinez@example.com\",\n  \"customerId\": 6,\n  \"vehicle\": {\n    \"vin\": 43301,\n    \"year\": 2024,\n    \"make\": \"Tesla\",\n    \"model\": \"Model Y\",\n    \"color\": \"Silver\",\n    \"odometer\": 15000,\n    \"price\": 48000.0,\n    \"type\": \"Electric\",\n    \"isSold\": true\n  },\n  \"totalPrice\": 50995.0,\n  \"monthlyPayment\": 2220.132635670192,\n  \"loanTerm\": 24,\n  \"isFinanced\": true\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/sales",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"sales"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "deleteSalesContract",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/sales/delete/6",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"sales",
+								"delete",
+								"6"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "LeaseController",
+			"item": [
+				{
+					"name": "getLeaseContractById",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/leases?id=7",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"leases"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "7"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "postNewLeaseContract",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"contractID\": 7,\n  \"startDate\": \"2024-11-11\",\n  \"customerName\": \"Emma Mcmandy\",\n  \"customerEmail\": \"emma.mandwand@wanda.com\",\n  \"customerId\": 7,\n  \"vehicle\": {\n    \"vin\": 90243,\n    \"year\": 2024,\n    \"make\": \"Bai-Bai\",\n    \"model\": \"V3\",\n    \"vehicleType\": \"Falcon 9\",\n    \"color\": \"Blue\",\n    \"odometer\": 2000000,\n    \"price\": 1000000.00,\n    \"isSold\": false\n  },\n  \"totalPrice\": 24000000.0,\n  \"monthlyPayment\": 66996.67,\n  \"leaseFee\": 1540.0,\n  \"expectedEndingValue\": 11000.0\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/leases",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"leases"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "deleteLeaseContract",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/leases/delete/7",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"leases",
+								"delete",
+								"7"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
