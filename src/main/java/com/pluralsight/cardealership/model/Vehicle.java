@@ -1,23 +1,24 @@
+// Vehicle.java
 package com.pluralsight.cardealership.model;
 
 public class Vehicle {
 
     private int vin;
-    private int year;
-    private String make;
-    private String model;
-    private String vehicleType;
-    private String color;
-    private int odometer;
-    private double price;
-    private boolean isSold;
+    private final int year;
+    private final String make;
+    private final String model;
+    private final String type;
+    private final String color;
+    private final int odometer;
+    private final double price;
+    private final boolean isSold;
 
     public Vehicle(int vin, int year, String make, String model, String vehicleType, String color, int odometer, double price, boolean isSold) {
         this.vin = vin;
         this.year = year;
         this.make = make;
         this.model = model;
-        this.vehicleType = vehicleType;
+        this.type = vehicleType;
         this.color = color;
         this.odometer = odometer;
         this.price = price;
@@ -53,7 +54,7 @@ public class Vehicle {
     }
 
     public String getType() {
-        return vehicleType;
+        return type;
     }
 
     public boolean isSold(){ return isSold; }
@@ -69,7 +70,7 @@ public class Vehicle {
                 ", year=" + year +
                 ", make='" + make + '\'' +
                 ", model='" + model + '\'' +
-                ", vehicleType='" + vehicleType + '\'' +
+                ", vehicleType='" + type + '\'' +
                 ", color='" + color + '\'' +
                 ", odometer=" + odometer +
                 ", price=" + price +
