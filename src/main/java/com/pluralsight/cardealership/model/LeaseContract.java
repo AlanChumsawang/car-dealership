@@ -35,4 +35,15 @@ public class LeaseContract extends Contract {
                 getLeaseFee(), contract.getTotalPrice(), contract.monthlyPayment);
     }
 
+    public void setLeaseFee(double leaseFee) {
+        this.leaseFee = leaseFee;
+    }
+
+    public void setExpectedEndingValue(double expectedEndingValue) {
+        this.expectedEndingValue = expectedEndingValue;
+    }
+
+    public void setMonthlyPayment(double monthlyPayment) {
+        this.monthlyPayment = monthlyPayment;
+    }
 }

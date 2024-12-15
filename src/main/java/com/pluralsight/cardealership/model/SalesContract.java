@@ -1,13 +1,14 @@
+// SalesContract.java
 package com.pluralsight.cardealership.model;
 
 public class SalesContract extends Contract {
-    private double salesTax;
-    private double recordingFee = 100.00;
-    private double processingFee;
-    private boolean isFinanced;
-    private double annualInterestRate;
-    private int loanTerm;
-    private double monthlyPayment;
+    private final double salesTax;
+    private final double recordingFee = 100.00;
+    private final double processingFee;
+    private final boolean isFinanced;
+    private final double annualInterestRate;
+    private final int loanTerm;
+    private final double monthlyPayment;
 
     public SalesContract(int contractID, String startDate, String customerName, String customerEmail, int customerId, Vehicle vehicle, boolean isFinanced) {
         super(startDate, customerName, customerEmail, customerId, vehicle, contractID);
@@ -26,7 +27,7 @@ public class SalesContract extends Contract {
             this.loanTerm = 48;
         } else {
             this.annualInterestRate = 0.0;
-            this.loanTerm = 1; // Avoid division by zero
+            this.loanTerm = 1;
         }
         this.monthlyPayment = getMonthlyPayment();
     }
