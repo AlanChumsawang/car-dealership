@@ -7,7 +7,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -100,6 +99,14 @@ public class VehicleController {
             @RequestParam(required = false) String type) {
 
         List<Vehicle> vehicles = vehicleDao.findAllVehicles();
+
+        /*
+        The stream() method is called on the vehicles list to create a stream of Vehicle objects. The stream is then
+        filtered using the filter() method to include only the vehicles that meet the specified criteria. The
+        collect() method is called to convert the stream back into a list of Vehicle objects.
+        Stream allowed me to cut out a lot of the boilerplate code that would have been necessary to filter the
+        vehicles list using a looped if-else.
+         */
         return vehicles.stream()
                 .filter(v -> vin == null || Objects.equals(v.getVin(), vin))
                 .filter(v -> minPrice == null || v.getPrice() >= minPrice)
